@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup as BS
 import requests
 
-pages = 1 # страница
+pages = 1 # номер страницы
 domain = 'https://informburo.kz/' # домен
 tag = f'{domain}tags/pozhar?page={pages}' # страница с пожаром
 
