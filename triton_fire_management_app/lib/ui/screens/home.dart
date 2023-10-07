@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.only(
               topRight: Radius.circular(30), topLeft: Radius.circular(30)),
           boxShadow: [
-            BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+            BoxShadow(color: Color.fromARGB(96, 102, 80, 80), spreadRadius: 0, blurRadius: 10),
           ],
         ),
         child: ClipRRect(
