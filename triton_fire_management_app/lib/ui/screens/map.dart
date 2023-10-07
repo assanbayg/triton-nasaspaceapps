@@ -14,9 +14,12 @@ class _MapScreenState extends State<MapScreen> {
 
   late List<Region> _data;
   late MapShapeSource _mapSource;
+  late MapZoomPanBehavior _zoomPanBehavior;
+
   @override
   void initState() {
-    //for now random data
+    _zoomPanBehavior = MapZoomPanBehavior();
+    //for now random wildfire chance
     _data = const <Region>[
       Region('Almaty', 20),
       Region('Aqmola', 30),
@@ -68,43 +71,67 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox(
-        height: 520,
-        child: Center(
-          child: SfMaps(
-            layers: <MapShapeLayer>[
-              MapShapeLayer(
-                source: _mapSource,
-                showDataLabels: true,
-                legend: const MapLegend(MapElement.shape),
-                tooltipSettings: MapTooltipSettings(
-                    color: Colors.grey[700],
-                    strokeColor: Colors.white,
-                    strokeWidth: 2),
-                strokeColor: Colors.white,
-                strokeWidth: 0.5,
-                shapeTooltipBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      final bool scrollEnabled = constraints.maxHeight > 400;
+      double height = scrollEnabled ? constraints.maxHeight : 400;
+      if (MediaQuery.of(context).orientation == Orientation.landscape) {
+        final double refHeight = height * 0.6;
+        height = height > 500 ? (refHeight < 500 ? 500 : refHeight) : height;
+      }
+
+      return Container(
+        padding: scrollEnabled
+            ? EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.05,
+                bottom: MediaQuery.of(context).size.height * 0.05)
+            : const EdgeInsets.only(top: 10, bottom: 15),
+        child: Column(
+          children: [
+            const Padding(
+                padding: EdgeInsets.only(top: 15, bottom: 30),
+                child: Align(
                     child: Text(
-                      _data[index].regionName,
-                      style: const TextStyle(color: Colors.white),
+                  'Wildfire chance in Kazakhstanding',
+                  style: TextStyle(fontSize: 20),
+                ))),
+            Expanded(
+              child: SfMaps(
+                layers: <MapShapeLayer>[
+                  MapShapeLayer(
+                    zoomPanBehavior: _zoomPanBehavior,
+                    source: _mapSource,
+                    showDataLabels: true,
+                    legend: const MapLegend(MapElement.shape),
+                    tooltipSettings: MapTooltipSettings(
+                        color: Colors.grey[700],
+                        strokeColor: Colors.white,
+                        strokeWidth: 2),
+                    strokeColor: Colors.white,
+                    strokeWidth: 0.5,
+                    shapeTooltipBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          _data[index].regionName,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      );
+                    },
+                    dataLabelSettings: MapDataLabelSettings(
+                      textStyle: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize:
+                              Theme.of(context).textTheme.bodySmall!.fontSize),
                     ),
-                  );
-                },
-                dataLabelSettings: MapDataLabelSettings(
-                  textStyle: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize:
-                          Theme.of(context).textTheme.bodySmall!.fontSize),
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ),
-    );
+      );
+    });
   }
 }

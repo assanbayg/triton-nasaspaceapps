@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:triton_fire_management_app/ui/screens/information.dart';
 import 'package:triton_fire_management_app/ui/screens/map.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,7 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Color color = Colors.white;
   var selectedIndex = 0;
   List<Widget> screens = [
-    Placeholder(),
+    InformationScreen(),
     MapScreen(),
     Placeholder(),
   ];
