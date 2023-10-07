@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 class Region {
-  const Region(this.name, this.color, this.regionId);
+  const Region(this.regionName, this.regionColor, this.regionId);
 
-  final String name;
-  final Color color;
+  final String regionName;
+  final Color regionColor;
   final String regionId;
 }

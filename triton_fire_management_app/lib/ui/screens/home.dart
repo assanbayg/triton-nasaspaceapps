@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:triton_fire_management_app/ui/screens/map.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/nav-bar';
@@ -13,7 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var selectedIndex = 0;
   List<Widget> screens = [
     Placeholder(),
-    Placeholder(),
+    MapScreen(),
     Placeholder(),
   ];
 
@@ -47,7 +48,10 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.only(
               topRight: Radius.circular(30), topLeft: Radius.circular(30)),
           boxShadow: [
-            BoxShadow(color: Color.fromARGB(96, 102, 80, 80), spreadRadius: 0, blurRadius: 10),
+            BoxShadow(
+                color: Color.fromARGB(96, 102, 80, 80),
+                spreadRadius: 0,
+                blurRadius: 10),
           ],
         ),
         child: ClipRRect(
