@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_maps/maps.dart';
-import 'package:triton_fire_management_app/models/region.dart';
+import 'package:triton_fire_management_app/models/district.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -21,25 +21,29 @@ class _MapScreenState extends State<MapScreen> {
     _zoomPanBehavior = MapZoomPanBehavior();
     //for now random wildfire chance
     _data = const <Region>[
-      Region('Almaty', 20),
-      Region('Aqmola', 30),
-      Region('Aqtöbe', 25),
-      Region('Atyrau', 90),
-      Region('East Kazakhstan', 18),
-      Region('Mangghystau', 45),
-      Region('North Kazakhstan', 40),
-      Region('Pavlodar', 48),
-      Region('Qaraghandy', 28),
-      Region('Qostanay', 44),
-      Region('Qyzylorda', 87),
-      Region('South Kazakhstan', 12),
-      Region('West Kazakhstan', 32),
-      Region('Zhambyl', 89)
+      Region('Abayskiy', 20),
+      Region('Ayagozskiy', 30),
+      Region('Beskaragayskiy', 25),
+      Region('Borodulikhinskiy', 90),
+      Region('Glubokovskiy', 18),
+      Region('Katon-Karagayskiy', 45),
+      Region('Kokpektinskiy', 40),
+      Region('Kurchumskiy', 48),
+      Region('Leninogorsk', 28),
+      Region('Semipalatinskiy', 44),
+      Region('Glubokovskiy', 87),
+      Region('Tarbagatayskiy', 30),
+      Region('Shemonaikhinskiy', 33),
+      Region('Ulanskiy', 0),
+      Region('Urdzharskiy', 78),
+      Region('Zaysanskiy', 87),
+      Region('Zharminskiy', 54),
+      Region('Zyryanovsk', 12),
     ];
 
     _mapSource = MapShapeSource.asset(
-      'assets/kz_1.json',
-      shapeDataField: 'NAME_1',
+      'assets/kz_2.json',
+      shapeDataField: 'NAME_2',
       dataCount: _data.length,
       primaryValueMapper: (int index) => _data[index].regionName,
       dataLabelMapper: (int index) => _data[index].regionName,
@@ -92,7 +96,7 @@ class _MapScreenState extends State<MapScreen> {
                 padding: EdgeInsets.only(top: 15, bottom: 30),
                 child: Align(
                     child: Text(
-                  'Wildfire chance in Kazakhstanding',
+                  'Wildfire chance in East Kazakhstan',
                   style: TextStyle(fontSize: 20),
                 ))),
             Expanded(
