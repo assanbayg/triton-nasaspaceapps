@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup as BS
 import requests
+import json
 
 pages = 1 # номер страницы
 domain = 'https://informburo.kz/' # домен
@@ -22,7 +23,7 @@ def extract_article_info(html):
             image_url = f"{domain}{article_card.img['data-src'][1::]}"
             href = article_card.a['href']
 
-            articles.append([article_text, image_url, href]) # добавление всех новостей в один список
+            articles.append({'title': article_text, 'image_url': image_url, 'article_url': href}) # добавление всех новостей в один список
     else:
         return 0
     
@@ -31,6 +32,11 @@ def extract_article_info(html):
 # начать парсинг
 def parse_site():
     html_content = get_html(tag)
-    return extract_article_info(html_content) # возвращает список
+    articles = extract_article_info(html_content) # возвращает список
+
+    if articles:
+        return json.dumps(articles, ensure_ascii=False, indent=4)
+    else:
+        return json.dumps({'error': 'no articles were found'}, ensure_ascii=False,  indent=4)
 
 print(parse_site()[:])
