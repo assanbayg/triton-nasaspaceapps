@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:triton_fire_management_app/ui/widgets/information_app_bar.dart';
 import 'package:triton_fire_management_app/ui/widgets/fire_management.dart';
 import 'package:triton_fire_management_app/ui/widgets/fire_news.dart';
 import 'package:triton_fire_management_app/ui/widgets/fire_report_button.dart';
@@ -8,15 +11,28 @@ class InformationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
-    return Scaffold(
-      body: const Column(children: [
-        Text('News', style: TextStyle(fontSize: 20)),
-        FireNews(),
-        Text('Learn', style: TextStyle(fontSize: 20)),
-        FireManagement(),
-      ]),
+    return const Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InformationAppBar(),
+            Row(
+              children: [],
+            ),
+            FireManagement(),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Text('Recommended for you',
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ),
+            FireNews(),
+          ],
+        ),
+      ),
       floatingActionButton: ReportFireButton(),
     );
   }

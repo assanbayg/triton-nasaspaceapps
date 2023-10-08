@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:triton_fire_management_app/ui/screens/ar_screen.dart';
 import 'package:triton_fire_management_app/ui/screens/information.dart';
 import 'package:triton_fire_management_app/ui/screens/map.dart';
+import 'package:triton_fire_management_app/ui/screens/profile.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/nav-bar';
@@ -11,12 +13,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Color color = Colors.white;
-  var selectedIndex = 0;
-  List<Widget> screens = [
+  int selectedIndex = 0;
+  List<Widget> screens = const [
     InformationScreen(),
     MapScreen(),
-    Placeholder(),
+    ProfileScreen(),
+    ArScreen(),
   ];
 
   Widget buildIcon(IconData icon) {
@@ -38,10 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Triton'),
-      ),
-      backgroundColor: color,
       body: screens[selectedIndex],
       bottomNavigationBar: Container(
         height: size.height * 0.1,
@@ -67,10 +65,6 @@ class _HomeScreenState extends State<HomeScreen> {
             selectedItemColor: Theme.of(context).primaryColor,
             onTap: (value) => setState(() {
               selectedIndex = value;
-              if (value == 3) {
-                color = Color.fromRGBO(85, 139, 47, 1);
-              } else
-                color = Colors.white;
             }),
             items: [
               BottomNavigationBarItem(

@@ -16,7 +16,7 @@ class _ReportFireScreenState extends State<ReportFireScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Report Fire'),
+        title: const Text('Report Fire'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -25,7 +25,7 @@ class _ReportFireScreenState extends State<ReportFireScreen> {
           children: [
             Text(
               'Stage $currentStage: Select Fire Type',
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
             ),
             if (currentStage == 1)
               Column(
@@ -34,7 +34,7 @@ class _ReportFireScreenState extends State<ReportFireScreen> {
                     onTap: () => setState(() {
                       currentStage = 2; // Move to the next stage
                     }),
-                    child: Column(
+                    child: const Column(
                       children: [
                         Icon(Icons.alarm_add_rounded, size: 100),
                         Text('1st')
@@ -45,7 +45,7 @@ class _ReportFireScreenState extends State<ReportFireScreen> {
                     onTap: () => setState(() {
                       currentStage = 2; // Move to the next stage
                     }),
-                    child: Column(
+                    child: const Column(
                       children: [
                         Icon(Icons.alarm_add_rounded, size: 100),
                         Text('1st')
@@ -60,7 +60,7 @@ class _ReportFireScreenState extends State<ReportFireScreen> {
                 children: [
                   Text(
                     'Stage $currentStage: Enter Fire Data',
-                    style: TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18),
                   ),
                   TextFormField(
                     onChanged: (value) {
@@ -68,11 +68,11 @@ class _ReportFireScreenState extends State<ReportFireScreen> {
                         fireData = value;
                       });
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Describe the fire...',
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
                       // Handle sending the report here.
@@ -81,11 +81,11 @@ class _ReportFireScreenState extends State<ReportFireScreen> {
                       print(
                           'Report sent: Type - $selectedFireType, Data - $fireData');
                     },
-                    child: Text('Send Report'),
+                    child: const Text('Send Report'),
                   ),
                 ],
               ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             // Progress Indicator Line
             LinearProgressIndicator(
               value: currentStage / 2, // Divide by the total number of stages

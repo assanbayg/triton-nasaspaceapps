@@ -11,7 +11,7 @@ class FireNews extends StatefulWidget {
 }
 
 class _FireNewsState extends State<FireNews> {
-  late final newsList;
+  late List<News> newsList;
   Future<List<News>> loadNews() async {
     final newsService = NewsService();
     final newNewsList = await newsService.loadJsonData();
@@ -32,8 +32,9 @@ class _FireNewsState extends State<FireNews> {
     final Size size = MediaQuery.of(context).size;
 
     return SizedBox(
-      height: size.height / 4,
+      height: size.height / 3,
       child: ListView.builder(
+        scrollDirection: Axis.horizontal,
         itemCount: 10,
         itemBuilder: (BuildContext context, int index) {
           final news = newsList[index];
@@ -45,18 +46,17 @@ class _FireNewsState extends State<FireNews> {
               } else {}
             },
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
+              padding: const EdgeInsets.all(5),
+              child: Column(
                 children: [
-                  // it will hold image later
                   SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: Image.network(news.imageUrl),
+                    height: 150,
+                    width: 200,
+                    child: Image.network(news.imageUrl, fit: BoxFit.fill),
                   ),
-                  // it will hold news title
+                  const SizedBox(width: 5.0),
                   SizedBox(
-                    width: size.width - 125,
+                    width: 200,
                     height: 100,
                     child: Text(news.newsTitle),
                   ),
