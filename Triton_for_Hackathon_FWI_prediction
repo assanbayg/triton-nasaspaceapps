@@ -28,7 +28,7 @@ dataframe = {
     'Drought code': np.random.uniform(0, 100, num_rows),  # Random values for Drought code
     'Initial Spread Index': np.random.uniform(0, 100, num_rows),  # Random values for Initial Spread Index
     'Buildup Index': np.random.uniform(0, 100, num_rows),  # Random values for Buildup Index
-    'Classes': np.random.choice(['fire', 'not fire'], num_rows)  # Random 'fire' or 'not fire'
+    #'Classes': np.random.choice(['fire', 'not fire'], num_rows)  # Random 'fire' or 'not fire'
 }
 
 
@@ -52,10 +52,12 @@ files.download(file_name)
 
 
 #set column names and read our csv file
-column_names = ['Temperature', 'RH', 'Ws','Rain','FFMC','DMC','DC','ISI','BUI','Classes','FWI']
+column_names = ['Temperature', 'RH', 'Ws','Rain','FFMC','DMC','DC','ISI','BUI','FWI']
 df= pd.read_csv('/content/fire_weather2.csv', names=column_names,
                           na_values='?', comment='\t',
                           sep=',', skipinitialspace=True)
+df=df.drop(0)
+df.reset_index(drop=True, inplace=True)
 df.head()
 
 #let us get rid of non-numeric values
@@ -77,16 +79,6 @@ for i in columns_list:
   data[i] = data[i].astype(float)
 
 data.dtypes
-
-#data['Classes'] = pd.to_numeric(data['Classes'], errors='coerce')
-#non_numeric_rows = data[data['Classes'].isna()]
-#data = data.dropna(subset=['Classes'])
-#data['Classes'] = data['Classes'].fillna(0)
-#data['Classes'] = data['Classes'].astype(float)
-
-#'CLasses' column is categorical, let's change it to numerical column by sayin that "not fire" is 0, and "fire" is 1
-data['Classes'] = np.where(data['Classes'].str.contains("not fire"),0,1)
-data.head()
 
 #dividing out dataset into training and test dataset
 train_dataset = data.sample(frac=0.8, random_state=0)
