@@ -16,39 +16,6 @@ from sklearn.model_selection import train_test_split
 #set printing options
 np.set_printoptions(precision=3, suppress=True)
 
-#create our dataset (WARNING: The folowing 5 blocks of code, dataframe was made by developer in order to test the algorithm, it's not necessary to execute this)
-num_rows = 1000
-dataframe = {
-    'Temperature': np.random.uniform(15, 45, num_rows),  # Random temperature between 15 and 35 degrees Celsius
-    'Humidity rate': np.random.uniform(20, 80, num_rows),  # Random humidity rate between 20% and 80%
-    'Wind speed': np.random.uniform(0, 20, num_rows),  # Random wind speed between 0 and 20 km/h
-    'Rain': np.random.uniform(0, 100, num_rows),  # Random rain amount in mm
-    'Fine Fuel Moisture Code': np.random.uniform(0, 100, num_rows),  # Random values for Fine Fuel Moisture Code
-    'Duff Moisture Code': np.random.uniform(0, 100, num_rows),  # Random values for Duff Moisture Code
-    'Drought code': np.random.uniform(0, 100, num_rows),  # Random values for Drought code
-    'Initial Spread Index': np.random.uniform(0, 100, num_rows),  # Random values for Initial Spread Index
-    'Buildup Index': np.random.uniform(0, 100, num_rows),  # Random values for Buildup Index
-}
-
-
-#'FWI" is dependent on lot of features, create the column, which will depend on 6 basic features
-def calculate_fire_weather_index(row):
-    fwi = row['Temperature'] * 1.2 + row['Humidity rate'] * 0.35 + row['Wind speed'] * 0.5 + row['Initial Spread Index'] * 1.2 + row['Fine Fuel Moisture Code'] * 0.15 + row['Drought code'] * 0.8
-    return fwi
-
-dataframe['Fire Weather Index'] = pd.DataFrame(dataframe).apply(calculate_fire_weather_index, axis=1)
-
-
-dataf = pd.DataFrame(dataframe) #creating dataframe
-
-dataf.to_csv('fire_weather2.csv', index=False) #save dataframe as "fire_weather2.csv"
-
-from google.colab import files
-
-file_name = 'fire_weather2.csv'
-
-files.download(file_name)
-
 
 #set column names and read our csv file
 column_names = ['Temperature', 'RH', 'Ws','Rain','FFMC','DMC','DC','ISI','BUI','FWI']
@@ -109,7 +76,7 @@ def correlation(dataset, threshold):
 
 corr_features=correlation(train_features,0.85) #Thresholding, let's check if we have datas that correlated with each other very strong
 
-NOTE FOR PREVIOUS CODE: IF datas correlatd with each other extremely strong, it will lead to decrease of accuracy of our model, because they could redundant in our code
+NOTE FOR PREVIOUS CODE: IF datas correlated with each other extremely strong, it will lead to decrease of accuracy of our model, because they could redundant in our code
 
 corr_features #checking if we have strong correlated datas
 
