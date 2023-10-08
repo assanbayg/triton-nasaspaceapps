@@ -3,4 +3,4 @@ Managing Fire: Increasing Community-based Fire Management Opportunities App for 
 
 ## Geographical Boundaries Data
 
-The geographical boundaries data for Kazakhstan used in this project is sourced from Open Data Kazakhstan(https://github.com/open-data-kazakhstan/geo-boundaries-kz).
+The geographical boundaries data for Kazakhstan used in this project is sourced from [Open Data Kazakhstan](https://github.com/open-data-kazakhstan/geo-boundaries-kz).

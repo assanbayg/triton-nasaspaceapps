@@ -64,6 +64,7 @@ flutter:
   assets:
     - assets/kz_1.json
     - assets/kz_2.json
+    - assets/news.json
     - assets/icons/home.png
     - assets/icons/map.png
   #   - images/a_dot_ham.jpeg

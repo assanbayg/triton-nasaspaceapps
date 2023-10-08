@@ -7,13 +7,13 @@ class ReportFireButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
-              return ReportFireScreen();
+              return const ReportFireScreen();
             },
           ));
         },
-        child: Text('Report'));
+        child: const Text('Report'));
   }
 }

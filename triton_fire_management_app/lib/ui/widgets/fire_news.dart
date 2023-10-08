@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:triton_fire_management_app/models/news.dart';
+import 'package:triton_fire_management_app/services/news_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class FireNews extends StatefulWidget {
@@ -9,6 +11,22 @@ class FireNews extends StatefulWidget {
 }
 
 class _FireNewsState extends State<FireNews> {
+  late final newsList;
+  Future<List<News>> loadNews() async {
+    final newsService = NewsService();
+    final newNewsList = await newsService.loadJsonData();
+    setState(() {
+      newsList = newNewsList;
+    });
+    return newsList;
+  }
+
+  @override
+  void initState() {
+    loadNews();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -18,9 +36,10 @@ class _FireNewsState extends State<FireNews> {
       child: ListView.builder(
         itemCount: 10,
         itemBuilder: (BuildContext context, int index) {
+          final news = newsList[index];
           return GestureDetector(
             onTap: () async {
-              final uri = Uri.parse("https://flutter.io");
+              final uri = Uri.parse(news.newsUrl);
               if (await canLaunchUrl(uri)) {
                 await launchUrl(uri);
               } else {}
@@ -30,17 +49,16 @@ class _FireNewsState extends State<FireNews> {
               child: Row(
                 children: [
                   // it will hold image later
-                  Container(
+                  SizedBox(
                     height: 100,
-                    width: 20,
-                    color: Colors.red,
+                    width: 100,
+                    child: Image.network(news.imageUrl),
                   ),
                   // it will hold news title
-                  Container(
-                    width: 120,
-                    child: Center(
-                      child: Text('Bad News'),
-                    ),
+                  SizedBox(
+                    width: size.width - 125,
+                    height: 100,
+                    child: Text(news.newsTitle),
                   ),
                 ],
               ),

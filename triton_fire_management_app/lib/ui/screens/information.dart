@@ -10,12 +10,14 @@ class InformationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return const Column(children: [
-      Text('News', style: TextStyle(fontSize: 20)),
-      FireNews(),
-      Text('Learn', style: TextStyle(fontSize: 20)),
-      FireManagement(),
-      ReportFireButton(),
-    ]);
+    return Scaffold(
+      body: const Column(children: [
+        Text('News', style: TextStyle(fontSize: 20)),
+        FireNews(),
+        Text('Learn', style: TextStyle(fontSize: 20)),
+        FireManagement(),
+      ]),
+      floatingActionButton: ReportFireButton(),
+    );
   }
 }
