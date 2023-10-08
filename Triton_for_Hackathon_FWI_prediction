@@ -96,6 +96,14 @@ test_features_scaled=scaler.transform(test_features)
 
 train_features_scaled
 
+plt.subplots(figsize=(15, 5))
+plt.subplot(1, 2, 1)
+sns.boxplot(data=train_features)
+plt.title('Train features Before Scaling')
+plt.subplot(1, 2, 2)
+sns.boxplot(data=train_features_scaled)
+plt.title('Train features After Scaling')
+
 #checking on which values our label is dependent
 lm1 = smf.ols(formula='FWI ~ RH + Temperature + Ws + DC + ISI + BUI + FFMC + Rain + DMC', data=data).fit()
 lm1.params
