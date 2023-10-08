@@ -1,0 +1,188 @@
+#import libraries
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+import statsmodels.formula.api as smf
+from sklearn.linear_model import LinearRegression
+from sklearn import metrics
+from sklearn.model_selection import train_test_split
+
+%matplotlib inline
+
+#set printing options
+np.set_printoptions(precision=3, suppress=True)
+
+#create our dataset (WARNING: The folowing 5 blocks of code, dataframe was made by developer in order to test the algorithm, it's not necessary to execute this)
+num_rows = 1000
+dataframe = {
+    'Temperature': np.random.uniform(15, 45, num_rows),  # Random temperature between 15 and 35 degrees Celsius
+    'Humidity rate': np.random.uniform(20, 80, num_rows),  # Random humidity rate between 20% and 80%
+    'Wind speed': np.random.uniform(0, 20, num_rows),  # Random wind speed between 0 and 20 km/h
+    'Rain': np.random.uniform(0, 100, num_rows),  # Random rain amount in mm
+    'Fine Fuel Moisture Code': np.random.uniform(0, 100, num_rows),  # Random values for Fine Fuel Moisture Code
+    'Duff Moisture Code': np.random.uniform(0, 100, num_rows),  # Random values for Duff Moisture Code
+    'Drought code': np.random.uniform(0, 100, num_rows),  # Random values for Drought code
+    'Initial Spread Index': np.random.uniform(0, 100, num_rows),  # Random values for Initial Spread Index
+    'Buildup Index': np.random.uniform(0, 100, num_rows),  # Random values for Buildup Index
+}
+
+
+#'FWI" is dependent on lot of features, create the column, which will depend on 6 basic features
+def calculate_fire_weather_index(row):
+    fwi = row['Temperature'] * 1.2 + row['Humidity rate'] * 0.35 + row['Wind speed'] * 0.5 + row['Initial Spread Index'] * 1.2 + row['Fine Fuel Moisture Code'] * 0.15 + row['Drought code'] * 0.8
+    return fwi
+
+dataframe['Fire Weather Index'] = pd.DataFrame(dataframe).apply(calculate_fire_weather_index, axis=1)
+
+
+dataf = pd.DataFrame(dataframe) #creating dataframe
+
+dataf.to_csv('fire_weather2.csv', index=False) #save dataframe as "fire_weather2.csv"
+
+from google.colab import files
+
+file_name = 'fire_weather2.csv'
+
+files.download(file_name)
+
+
+#set column names and read our csv file
+column_names = ['Temperature', 'RH', 'Ws','Rain','FFMC','DMC','DC','ISI','BUI','FWI']
+df= pd.read_csv('/content/fire_weather2.csv', names=column_names,
+                          na_values='?', comment='\t',
+                          sep=',', skipinitialspace=True)
+df=df.drop(0)
+df.reset_index(drop=True, inplace=True)
+df.head()
+
+#let us get rid of non-numeric values
+df.isna().sum()
+data = df.dropna()
+
+data.head() #let's check the head of our dataframe
+
+data.dtypes #let's check columns data types
+
+#if we have non-float column, this lines of code will translate all columns to the float datatype
+import pandas as pd
+columns_list=['Temperature', 'RH', 'Ws','Rain','FFMC','DMC','DC','ISI','BUI','FWI',]
+for i in columns_list:
+  data[i] = pd.to_numeric(data[i], errors='coerce')
+  non_numeric_rows = data[data[i].isna()]
+  data = data.dropna(subset=[i])
+  data[i] = data[i].fillna(0)
+  data[i] = data[i].astype(float)
+
+data.dtypes
+
+#dividing out dataset into training and test dataset
+train_dataset = data.sample(frac=0.8, random_state=0)
+test_dataset = data.drop(train_dataset.index)
+
+#let's choose our independent and dependent values
+train_features = train_dataset.copy()
+test_features = test_dataset.copy()
+
+train_labels = train_features.pop('FWI')
+test_labels = test_features.pop('FWI')
+
+train_features.corr() #checking correlation between datas
+
+#checking for the multicollinearity
+plt.figure(figsize=(12,10))
+corr=train_features.corr()
+sns.heatmap(corr,annot=True)
+
+def correlation(dataset, threshold):
+    col_corr = set()
+    corr_matrix = dataset.corr()
+    for i in range(len(corr_matrix.columns)):
+        for j in range(i):
+            if abs(corr_matrix.iloc[i, j]) > threshold:
+                colname = corr_matrix.columns[i]
+                col_corr.add(colname)
+    return col_corr
+
+corr_features=correlation(train_features,0.85) #Thresholding, let's check if we have datas that correlated with each other very strong
+
+NOTE FOR PREVIOUS CODE: IF datas correlatd with each other extremely strong, it will lead to decrease of accuracy of our model, because they could redundant in our code
+
+corr_features #checking if we have strong correlated datas
+
+print(train_features.columns)
+
+#if we have that kind of datas we will remove one of the column from these features in order to avoid multicollinearuity
+train_features.drop(columns = corr_features, axis = 1, inplace=True)
+test_features.drop(columns = corr_features,axis = 1, inplace=True)
+train_features.shape
+test_features.shape
+
+#Feature scaling
+from sklearn.preprocessing import StandardScaler
+scaler=StandardScaler()
+train_features_scaled=scaler.fit_transform(train_features)
+test_features_scaled=scaler.transform(test_features)
+
+train_features_scaled
+
+#checking on which values our label is dependent
+lm1 = smf.ols(formula='FWI ~ RH + Temperature + Ws + DC + ISI + BUI + FFMC + Rain + DMC', data=data).fit()
+lm1.params
+
+#Finding coefficients
+feature_cols = ['RH', 'Rain', 'Temperature', 'Ws', 'DC', 'ISI', 'BUI', 'FFMC', 'DMC']
+X = data[feature_cols]
+y = data['FWI']
+
+
+lm2 = LinearRegression()
+lm2.fit(X, y)
+
+
+print(lm2.intercept_)
+print(lm2.coef_)
+
+list(zip(feature_cols, lm2.coef_)) #let's pair feature names with coefficients
+
+lm1.summary() #let's see the overall information
+
+#Let's check for MSE if test size is 0.25 from all information
+X = data[['RH', 'Rain', 'Temperature', 'Ws', 'DC', 'ISI', 'BUI', 'FFMC', 'DMC']]
+y = data['FWI']
+
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=1)
+
+
+lm2 = LinearRegression()
+
+
+lm2.fit(X_train, y_train)
+
+
+y_pred = lm2.predict(X_test)
+
+
+print(np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+
+
+#Building our model and looking prediction and true values
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import r2_score
+linreg=LinearRegression()
+linreg.fit(train_features_scaled,train_labels)
+y_pred=linreg.predict(test_features_scaled)
+mae=mean_absolute_error(test_labels,y_pred)
+score=r2_score(test_labels,y_pred)
+print("Mean absolute error: ", mae)
+print("R2 Score: ", score)
+print("Prediction: ", y_pred)
+print("Test labels: ", test_labels)
+
+for i in y_pred:
+  print((i*100)/data['FWI'].max())
