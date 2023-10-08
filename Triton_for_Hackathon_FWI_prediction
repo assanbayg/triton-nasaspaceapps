@@ -183,3 +183,6 @@ print("Mean absolute error: ", mae)
 print("R2 Score: ", score)
 print("Prediction: ", y_pred)
 print("Test labels: ", test_labels)
+
+for i in y_pred:
+  print((i*100)/data['FWI'].max())
