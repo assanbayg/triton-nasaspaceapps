@@ -22,7 +22,6 @@ column_names = ['Temperature', 'RH', 'Ws','Rain','FFMC','DMC','DC','ISI','BUI','
 df= pd.read_csv('/content/fire_weather2.csv', names=column_names,
                           na_values='?', comment='\t',
                           sep=',', skipinitialspace=True)
-df=df.drop(0)
 df.reset_index(drop=True, inplace=True)
 df.head()
 
