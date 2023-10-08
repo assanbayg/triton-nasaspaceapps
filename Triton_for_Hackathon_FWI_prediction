@@ -28,7 +28,6 @@ dataframe = {
     'Drought code': np.random.uniform(0, 100, num_rows),  # Random values for Drought code
     'Initial Spread Index': np.random.uniform(0, 100, num_rows),  # Random values for Initial Spread Index
     'Buildup Index': np.random.uniform(0, 100, num_rows),  # Random values for Buildup Index
-    #'Classes': np.random.choice(['fire', 'not fire'], num_rows)  # Random 'fire' or 'not fire'
 }
 
 
